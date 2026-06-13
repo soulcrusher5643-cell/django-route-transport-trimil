@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="bg-light text-dark py-5 text-center border-bottom">
+    <div class="container py-4">
+        <h1 class="display-4 fw-bold">Route Transportation & Courier Booking Platform</h1>
+        <p class="lead text-muted mt-3">Your unified logistics and travel gateway. Plan routes, book transit tickets (Train, Flight, Bus), and dispatch secure courier services seamlessly via a single web interface.</p>
+        <div class="mt-4">
+            <a href="{% url 'contact' %}" class="btn btn-primary btn-lg px-4 me-2">Book a Route Now</a>
+            <a href="{% url 'about' %}" class="btn btn-outline-secondary btn-lg px-4">Explore System Modules</a>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row text-center g-4">
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm h-100">
+                <div class="fs-1 text-primary mb-2">🚆 / ✈️ / 🚌</div>
+                <h3>Multi-Modal Booking</h3>
+                <p class="text-muted text-sm">Compare, schedule, and secure travel tickets effortlessly across dynamic national bus lines, major rail systems, and airline fleets.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm h-100">
+                <div class="fs-1 text-success mb-2">📦</div>
+                <h3>Integrated Couriers</h3>
+                <p class="text-muted text-sm">Schedule real-time parcel dispatch, verify weight classes, estimate transit fees, and keep oversight on dynamic delivery checkpoints.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm h-100">
+                <div class="fs-1 text-warning mb-2">⚙️</div>
+                <h3>Unified Dashboard</h3>
+                <p class="text-muted text-sm">Centralized control arrays managing real-time system parameters, route optimizations, and precise transaction analytics securely.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

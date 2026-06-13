@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h2 class="mb-4 text-center border-bottom pb-2">System Purpose & Architecture Blueprint</h2>
+            <p class="lead text-muted">Modern transportation and logistics form the backbone of connectivity. This platform consolidates decoupled route planning frameworks into a single real-time administrative interface.</p>
+            
+            <h4 class="mt-5 mb-3 text-primary">Core Application Modules</h4>
+            <div class="accordion" id="modulesAccordion">
+                
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#m1">
+                            1. Admin Dashboard Module
+                        </button>
+                    </h2>
+                    <div id="m1" class="accordion-collapse collapse show" data-bs-parent="#modulesAccordion">
+                        <div class="accordion-body">
+                            Handles total system asset oversight. Global administrators maintain operational access parameters, view core structural telemetry metrics, and evaluate dynamic network bottlenecks.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#m2">
+                            2. User & Role Management 
+                        </button>
+                    </h2>
+                    <div id="m2" class="accordion-collapse collapse" data-bs-parent="#modulesAccordion">
+                        <div class="accordion-body">
+                            Enforces strict granular Role-Based Access Control (RBAC) layers distinguishing global staff entities, dispatch managers, and standard customer boundaries securely.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#m3">
+                            3. Route, Booking & Operations Management 
+                        </button>
+                    </h2>
+                    <div id="m3" class="accordion-collapse collapse" data-bs-parent="#modulesAccordion">
+                        <div class="accordion-body">
+                            Enables full structural CRUD operations over active transit timelines, dynamic fee updates, pricing configurations, and global metric reports generation.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#m4">
+                            4. Feedback & Notification 
+                        </button>
+                    </h2>
+                    <div id="m4" class="accordion-collapse collapse" data-bs-parent="#modulesAccordion">
+                        <div class="accordion-body">
+                            Keeps a complete log of customer complaints and issues, enabling administration staff to push transactional system status alerts seamlessly.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#m5">
+                            5. Customer Booking & Tracking 
+                        </button>
+                    </h2>
+                    <div id="m5" class="accordion-collapse collapse" data-bs-parent="#modulesAccordion">
+                        <div class="accordion-body">
+                            Allows customers to lookup terminal availability tables, generate multi-class digital tickets, map active courier items, and access payment checkouts securely.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
