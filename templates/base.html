@@ -17,7 +17,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link {% if active_page == 'home' %}active active-custom{% endif %}" href="{% url 'home' %}">Home</a>
                     </li>
@@ -28,6 +28,15 @@
                         <a class="nav-link {% if active_page == 'contact' %}active active-custom{% endif %}" href="{% url 'contact' %}">Contact Us</a>
                     </li>
                 </ul>
+                <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+                    {% if request.user.is_authenticated %}
+                        <span class="badge bg-secondary px-3 py-2 me-1 font-monospace">👤 {{ request.user.username }}</span>
+                        <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm px-3">Sign Out</a>
+                    {% else %}
+                        <a href="{% url 'Sign_In' %}" class="btn btn-outline-light btn-sm px-3">Sign In</a>
+                        <a href="{% url 'Sign_Up' %}" class="btn btn-primary btn-sm px-3 font-weight-bold">Sign Up</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </nav>
