@@ -271,8 +271,8 @@ h1{animation-delay:.2s}
     <li><a href="#about">About</a></li>
   </ul>
   <div class="nav-cta">
-    <a href="#" class="btn btn-ghost">Login</a>
-    <a href="#" class="btn btn-primary"><i class="fas fa-arrow-right"></i> Register</a>
+    <a href="#modal" class="btn btn-ghost" onclick="event.preventDefault(); openAuthModal('login')">Login</a>
+    <a href="#modal" class="btn btn-primary" onclick="event.preventDefault(); openAuthModal('register')"><i class="fas fa-arrow-right"></i> Register</a>
   </div>
   <button class="hamburger" onclick="toggleNav()" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
 </nav>
@@ -774,6 +774,22 @@ function showTracking(){
     badge.innerHTML = '<i class="fas fa-box"></i> Courier #' + id.toUpperCase();
   }
   document.getElementById('track-result').style.display='block';
+}
+
+function openAuthModal(mode){
+  if(mode==='login'){
+    document.getElementById('modal-title').textContent='User Sign In';
+    document.getElementById('modal-sub').textContent='Enter your account credentials to access your dashboard.';
+    document.getElementById('modal-price').textContent='Verified';
+    document.getElementById('modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  } else if(mode==='register'){
+    document.getElementById('modal-title').textContent='Create Account';
+    document.getElementById('modal-sub').textContent='Register a new account to book tickets and manage shipments.';
+    document.getElementById('modal-price').textContent='Free Account';
+    document.getElementById('modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
 }
 
 document.querySelectorAll('a[href="#"]').forEach(a => {
