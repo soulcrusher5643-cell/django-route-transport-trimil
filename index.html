@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RouteX — Transport & Courier Booking</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0b1623;
+  --navy2:#111f30;
+  --navy3:#1a2e45;
+  --accent:#e8a030;
+  --accent2:#f0b94a;
+  --teal:#18c99d;
+  --coral:#e85d4a;
+  --blue:#3a8ef6;
+  --text:#f0f4f8;
+  --muted:#7a93ad;
+  --border:rgba(255,255,255,0.07);
+  --card:rgba(255,255,255,0.04);
+  --card-hover:rgba(255,255,255,0.07);
+  --radius:14px;
+  --radius-sm:8px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Manrope',sans-serif;background:var(--navy);color:var(--text);overflow-x:hidden;line-height:1.6}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--navy)}
+::-webkit-scrollbar-thumb{background:var(--navy3);border-radius:3px}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:68px;background:rgba(11,22,35,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.5px;color:var(--text)}
+.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:14px;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{display:flex;gap:10px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 22px;border-radius:50px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;text-decoration:none;font-family:'Manrope',sans-serif}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-ghost:hover{background:var(--card);border-color:rgba(255,255,255,0.18)}
+.btn-primary{background:var(--accent);color:#0b1623}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+.hamburger{display:none;background:none;border:none;color:var(--text);font-size:20px;cursor:pointer}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 40px 80px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 60% 40%,rgba(58,142,246,0.08) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 20% 70%,rgba(24,201,157,0.06) 0%,transparent 70%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.4;pointer-events:none}
+.hero-content{position:relative;max-width:700px}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:24px;padding:6px 14px;border:1px solid rgba(232,160,48,0.3);border-radius:50px}
+.hero-eyebrow i{font-size:11px}
+h1{font-family:'Syne',sans-serif;font-size:clamp(42px,6vw,74px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:24px}
+h1 .line2{color:var(--accent)}
+h1 .line3{color:var(--muted);font-weight:400}
+.hero-desc{font-size:17px;color:var(--muted);max-width:520px;margin-bottom:40px;font-weight:400;line-height:1.7}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+.hero-stats{display:flex;gap:40px;margin-top:60px;padding-top:40px;border-top:1px solid var(--border);flex-wrap:wrap}
+.stat-item{}
+.stat-num{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:var(--text)}
+.stat-label{font-size:12px;color:var(--muted);margin-top:2px}
+.hero-visual{position:absolute;right:40px;top:50%;transform:translateY(-50%);width:400px;opacity:.08;pointer-events:none}
+.hero-visual svg{width:100%;height:auto}
+
+/* ── SEARCH WIDGET ── */
+.search-section{padding:0 40px;margin-top:-30px;position:relative;z-index:10}
+.search-card{background:var(--navy2);border:1px solid var(--border);border-radius:var(--radius);padding:28px 30px;box-shadow:0 24px 80px rgba(0,0,0,0.4)}
+.search-tabs{display:flex;gap:4px;margin-bottom:24px;background:rgba(255,255,255,0.04);border-radius:var(--radius-sm);padding:4px;width:fit-content}
+.s-tab{padding:8px 20px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .2s;display:flex;align-items:center;gap:6px;border:none;background:none;font-family:'Manrope',sans-serif}
+.s-tab.active{background:var(--accent);color:#0b1623}
+.s-tab:hover:not(.active){color:var(--text)}
+.search-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:12px;align-items:end}
+.field label{display:block;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.field input,.field select{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;color:var(--text);font-size:14px;font-family:'Manrope',sans-serif;outline:none;transition:border-color .2s}
+.field input:focus,.field select:focus{border-color:rgba(232,160,48,0.5)}
+.field select option{background:var(--navy2)}
+.btn-search{padding:13px 28px;border-radius:var(--radius-sm);font-size:14px;white-space:nowrap}
+
+/* ── SECTION COMMONS ── */
+section{padding:80px 40px}
+.section-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.section-tag::before{content:'';width:20px;height:2px;background:var(--accent);border-radius:1px}
+h2{font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,42px);font-weight:700;letter-spacing:-1px;margin-bottom:12px}
+.section-sub{color:var(--muted);font-size:16px;max-width:500px;line-height:1.7}
+
+/* ── SERVICES ── */
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:50px}
+.service-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.service-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s}
+.service-card:hover{border-color:rgba(232,160,48,0.3);transform:translateY(-4px)}
+.service-card:hover::before{opacity:1}
+.service-card.flight::before{background:radial-gradient(ellipse at top left,rgba(58,142,246,0.12),transparent)}
+.service-card.train::before{background:radial-gradient(ellipse at top left,rgba(24,201,157,0.12),transparent)}
+.service-card.bus::before{background:radial-gradient(ellipse at top left,rgba(232,160,48,0.12),transparent)}
+.service-card.courier::before{background:radial-gradient(ellipse at top left,rgba(232,93,74,0.12),transparent)}
+.svc-icon{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:20px}
+.svc-icon.fl{background:rgba(58,142,246,0.15);color:var(--blue)}
+.svc-icon.tr{background:rgba(24,201,157,0.15);color:var(--teal)}
+.svc-icon.bs{background:rgba(232,160,48,0.15);color:var(--accent)}
+.svc-icon.co{background:rgba(232,93,74,0.15);color:var(--coral)}
+.svc-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:8px}
+.svc-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:18px}
+.svc-link{font-size:13px;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:6px;text-decoration:none;transition:gap .2s}
+.svc-link:hover{gap:10px}
+
+/* ── ROUTES TABLE ── */
+.routes-section{background:var(--navy2)}
+.routes-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:36px;flex-wrap:wrap;gap:16px}
+.filter-bar{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap}
+.filter-btn{padding:7px 16px;border-radius:50px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .2s;font-family:'Manrope',sans-serif}
+.filter-btn.active,.filter-btn:hover{background:var(--accent);color:#0b1623;border-color:var(--accent)}
+.routes-list{display:flex;flex-direction:column;gap:12px}
+.route-row{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;display:grid;grid-template-columns:auto 1fr auto auto auto;gap:20px;align-items:center;transition:all .25s;cursor:pointer}
+.route-row:hover{border-color:rgba(232,160,48,0.25);background:var(--card-hover)}
+.route-mode{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.mode-flight{background:rgba(58,142,246,0.15);color:var(--blue)}
+.mode-train{background:rgba(24,201,157,0.15);color:var(--teal)}
+.mode-bus{background:rgba(232,160,48,0.15);color:var(--accent)}
+.route-main{}
+.route-cities{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.route-arrow{width:40px;height:1px;background:var(--muted);position:relative}
+.route-arrow::after{content:'▶';position:absolute;right:-6px;top:-5px;font-size:8px;color:var(--muted)}
+.route-meta{font-size:12px;color:var(--muted);display:flex;gap:14px}
+.route-meta span{display:flex;align-items:center;gap:4px}
+.route-duration{text-align:center}
+.dur-val{font-family:'Syne',sans-serif;font-size:15px;font-weight:700}
+.dur-label{font-size:11px;color:var(--muted)}
+.route-seats{text-align:center}
+.seats-val{font-size:13px;font-weight:600;color:var(--teal)}
+.seats-label{font-size:11px;color:var(--muted)}
+.route-price-col{text-align:right}
+.price-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--accent)}
+.price-btn{display:block;margin-top:6px;padding:7px 16px;background:var(--accent);color:#0b1623;border:none;border-radius:50px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif;transition:all .2s;text-align:center}
+.price-btn:hover{background:var(--accent2)}
+
+/* ── HOW IT WORKS ── */
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0;margin-top:50px;position:relative}
+.steps-grid::before{content:'';position:absolute;top:38px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--border),var(--border),transparent);pointer-events:none}
+.step-item{text-align:center;padding:0 20px;position:relative}
+.step-num{width:76px;height:76px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:24px;font-weight:700;color:var(--accent);margin:0 auto 20px;background:var(--navy);position:relative;z-index:1}
+.step-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* ── TRACKING ── */
+.tracking-section{background:linear-gradient(135deg,var(--navy2) 0%,var(--navy) 100%)}
+.tracking-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.track-form{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px}
+.track-input-wrap{display:flex;gap:10px;margin-bottom:24px}
+.track-input-wrap input{flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 16px;color:var(--text);font-size:14px;font-family:'Manrope',sans-serif;outline:none}
+.track-input-wrap input:focus{border-color:rgba(232,160,48,0.5)}
+.track-result{border-top:1px solid var(--border);padding-top:24px}
+.track-id-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:5px 12px;border-radius:50px;background:rgba(24,201,157,0.12);color:var(--teal);border:1px solid rgba(24,201,157,0.25);margin-bottom:14px}
+.track-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:20px}
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:flex;gap:14px;position:relative}
+.tl-item:not(:last-child)::after{content:'';position:absolute;left:14px;top:32px;bottom:0;width:1px;background:var(--border)}
+.tl-dot{width:28px;height:28px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;margin-top:2px;z-index:1}
+.tl-dot.done{border-color:var(--teal);background:rgba(24,201,157,0.15);color:var(--teal)}
+.tl-dot.active{border-color:var(--accent);background:rgba(232,160,48,0.15);color:var(--accent)}
+.tl-dot.pending{border-color:var(--border);color:var(--muted)}
+.tl-body{padding-bottom:20px}
+.tl-name{font-size:14px;font-weight:600;color:var(--text)}
+.tl-time{font-size:12px;color:var(--muted);margin-top:2px}
+.tracking-info{display:flex;flex-direction:column;gap:24px}
+.info-item{}
+.info-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.info-value{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;line-height:1}
+.info-value.teal{color:var(--teal)}
+.info-value.amber{color:var(--accent)}
+
+/* ── TESTIMONIALS ── */
+.testimonials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:50px}
+.testi-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px}
+.stars{color:var(--accent);font-size:14px;letter-spacing:2px;margin-bottom:16px}
+.testi-text{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:20px;font-style:italic}
+.testi-author{display:flex;align-items:center;gap:12px}
+.avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.author-name{font-size:14px;font-weight:600}
+.author-sub{font-size:12px;color:var(--muted)}
+
+/* ── CTA ── */
+.cta-section{text-align:center;padding:100px 40px;background:var(--navy2);position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(232,160,48,0.06),transparent);pointer-events:none}
+.cta-section h2{font-size:clamp(32px,5vw,52px);margin-bottom:16px}
+.cta-section p{color:var(--muted);font-size:16px;margin-bottom:36px;max-width:440px;margin-left:auto;margin-right:auto}
+.cta-actions{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+
+/* ── FOOTER ── */
+footer{background:var(--navy);border-top:1px solid var(--border);padding:50px 40px 30px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-brand{}
+.footer-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:12px}
+.footer-logo span{color:var(--accent)}
+.footer-tagline{font-size:13px;color:var(--muted);line-height:1.6;max-width:240px}
+.footer-col h4{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.footer-col ul{list-style:none}
+.footer-col li{margin-bottom:10px}
+.footer-col a{text-decoration:none;color:var(--muted);font-size:13px;transition:color .2s}
+.footer-col a:hover{color:var(--text)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted)}
+.social-links{display:flex;gap:14px}
+.social-links a{color:var(--muted);text-decoration:none;font-size:16px;transition:color .2s}
+.social-links a:hover{color:var(--accent)}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);z-index:200;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--navy2);border:1px solid var(--border);border-radius:var(--radius);padding:36px;max-width:480px;width:100%;position:relative;animation:modalIn .25s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;transition:color .2s}
+.modal-close:hover{color:var(--text)}
+.modal h3{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:6px}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:28px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-field label{display:block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.form-field input,.form-field select{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;color:var(--text);font-size:14px;font-family:'Manrope',sans-serif;outline:none;transition:border-color .2s}
+.form-field input:focus,.form-field select:focus{border-color:rgba(232,160,48,0.5)}
+.form-field.full{grid-column:1/-1}
+.modal-total{background:rgba(232,160,48,0.08);border:1px solid rgba(232,160,48,0.2);border-radius:var(--radius-sm);padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.total-label{font-size:13px;color:var(--muted)}
+.total-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:var(--accent)}
+.pay-btn{width:100%;padding:14px;border-radius:var(--radius-sm);font-size:15px;font-weight:700}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.hero-content>*{animation:fadeUp .7s ease both}
+.hero-eyebrow{animation-delay:.1s}
+h1{animation-delay:.2s}
+.hero-desc{animation-delay:.3s}
+.hero-actions{animation-delay:.4s}
+.hero-stats{animation-delay:.5s}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-links{display:none;flex-direction:column;position:absolute;top:68px;left:0;right:0;background:var(--navy2);padding:24px;border-bottom:1px solid var(--border);gap:20px;box-shadow:0 20px 40px rgba(0,0,0,0.5)}
+  .nav-links.open{display:flex}
+  .hamburger{display:block}
+  .hero{padding:100px 20px 60px}
+  .hero-visual{display:none}
+  .search-section{padding:0 20px}
+  .search-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto auto auto}
+  section{padding:60px 20px}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .tracking-inner{grid-template-columns:1fr}
+  .steps-grid::before{display:none}
+}
+@media(max-width:600px){
+  .search-grid{grid-template-columns:1fr}
+  .route-row{grid-template-columns:auto 1fr auto;grid-template-rows:auto auto}
+  .route-duration,.route-seats{display:none}
+  .hero-stats{gap:24px}
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Route<span>X</span></div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#routes">Routes</a></li>
+    <li><a href="#tracking">Track</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="#" class="btn btn-ghost">Login</a>
+    <a href="#" class="btn btn-primary"><i class="fas fa-arrow-right"></i> Register</a>
+  </div>
+  <button class="hamburger" onclick="toggleNav()" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow"><i class="fas fa-bolt"></i> Unified Travel & Logistics</div>
+    <h1>Move Smarter.<br><span class="line2">Book Faster.</span><br><span class="line3">Track Everything.</span></h1>
+    <p class="hero-desc">Flights, trains, buses, and courier services — all in one powerful platform. Real-time availability, instant booking, live tracking.</p>
+    <div class="hero-actions">
+      <a href="#search" class="btn btn-primary" style="font-size:15px;padding:13px 28px"><i class="fas fa-search"></i> Search Routes</a>
+      <a href="#tracking" class="btn btn-ghost" style="font-size:15px;padding:13px 28px"><i class="fas fa-map-marker-alt"></i> Track Shipment</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><div class="stat-num">4.8K+</div><div class="stat-label">Daily Bookings</div></div>
+      <div class="stat-item"><div class="stat-num">120+</div><div class="stat-label">Routes Covered</div></div>
+      <div class="stat-item"><div class="stat-num">99.2%</div><div class="stat-label">On-time Rate</div></div>
+      <div class="stat-item"><div class="stat-num">₹2Cr+</div><div class="stat-label">Processed Daily</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SEARCH -->
+<div class="search-section" id="search">
+  <div class="search-card">
+    <div class="search-tabs">
+      <button class="s-tab active" onclick="switchTab(this,'flight')"><i class="fas fa-plane"></i> Flight</button>
+      <button class="s-tab" onclick="switchTab(this,'train')"><i class="fas fa-train"></i> Train</button>
+      <button class="s-tab" onclick="switchTab(this,'bus')"><i class="fas fa-bus"></i> Bus</button>
+      <button class="s-tab" onclick="switchTab(this,'courier')"><i class="fas fa-box"></i> Courier</button>
+    </div>
+    <div class="search-grid">
+      <div class="field"><label>From</label><input type="text" placeholder="Origin city or airport…" id="from-field"/></div>
+      <div class="field"><label>To</label><input type="text" placeholder="Destination…" id="to-field"/></div>
+      <div class="field"><label>Date</label><input type="date" id="date-field"/></div>
+      <div class="field"><label id="pax-label">Passengers</label>
+        <select id="pax-field">
+          <option>1 Passenger</option><option>2 Passengers</option><option>3 Passengers</option><option>4+ Passengers</option>
+        </select>
+      </div>
+      <div class="field"><button class="btn btn-primary btn-search" onclick="doSearch()"><i class="fas fa-search"></i> Search</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-tag">What We Offer</div>
+  <h2>One Platform,<br>All Journeys</h2>
+  <p class="section-sub">From daily commutes to cross-country freight — we connect you to every mode of transport and logistics.</p>
+  <div class="services-grid">
+    <div class="service-card flight">
+      <div class="svc-icon fl"><i class="fas fa-plane"></i></div>
+      <div class="svc-title">Flight Booking</div>
+      <div class="svc-desc">Real-time fares across all major airlines. Domestic and international routes with instant e-ticket delivery.</div>
+      <a href="#routes" class="svc-link">Browse flights <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="service-card train">
+      <div class="svc-icon tr"><i class="fas fa-train"></i></div>
+      <div class="svc-title">Train Tickets</div>
+      <div class="svc-desc">All railway classes — Sleeper to AC First. PNR tracking, seat maps, and waitlist alerts built in.</div>
+      <a href="#routes" class="svc-link">Browse trains <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="service-card bus">
+      <div class="svc-icon bs"><i class="fas fa-bus"></i></div>
+      <div class="svc-title">Bus Booking</div>
+      <div class="svc-desc">State and private operators. AC sleeper, semi-sleeper, and ordinary services with live seat selection.</div>
+      <a href="#routes" class="svc-link">Browse buses <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="service-card courier">
+      <div class="svc-icon co"><i class="fas fa-box"></i></div>
+      <div class="svc-title">Courier Services</div>
+      <div class="svc-desc">Door-to-door pickup and delivery. Real-time GPS tracking, insurance options, and digital POD.</div>
+      <a href="#tracking" class="svc-link">Send a parcel <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ROUTES -->
+<section id="routes" class="routes-section">
+  <div class="section-tag">Live Availability</div>
+  <h2>Popular Routes</h2>
+  <p class="section-sub">Best fares updated in real-time. Click any route to book instantly.</p>
+  <div class="filter-bar" style="margin-top:36px">
+    <button class="filter-btn active" onclick="filterRoute(this,'all')">All</button>
+    <button class="filter-btn" onclick="filterRoute(this,'flight')"><i class="fas fa-plane"></i> Flights</button>
+    <button class="filter-btn" onclick="filterRoute(this,'train')"><i class="fas fa-train"></i> Trains</button>
+    <button class="filter-btn" onclick="filterRoute(this,'bus')"><i class="fas fa-bus"></i> Buses</button>
+  </div>
+  <div class="routes-list" id="routes-list">
+
+    <div class="route-row" data-type="flight" onclick="openModal('IndiGo 6E-441','Kochi → Delhi','3h 15m','₹5,420')">
+      <div class="route-mode mode-flight"><i class="fas fa-plane"></i></div>
+      <div class="route-main">
+        <div class="route-cities">Kochi (COK) <div class="route-arrow"></div> New Delhi (DEL)</div>
+        <div class="route-meta"><span><i class="fas fa-clock"></i> 08:00 → 11:15</span><span><i class="fas fa-tag"></i> IndiGo · 6E-441</span><span><i class="fas fa-circle" style="font-size:7px;color:var(--teal)"></i> Non-stop</span></div>
+      </div>
+      <div class="route-duration"><div class="dur-val">3h 15m</div><div class="dur-label">Duration</div></div>
+      <div class="route-seats"><div class="seats-val">24 seats</div><div class="seats-label">Available</div></div>
+      <div class="route-price-col"><div class="price-val">₹5,420</div><button class="price-btn">Book Now</button></div>
+    </div>
+
+    <div class="route-row" data-type="train" onclick="openModal('Kerala Express 16343','Trivandrum → Chennai','18h 10m','₹890')">
+      <div class="route-mode mode-train"><i class="fas fa-train"></i></div>
+      <div class="route-main">
+        <div class="route-cities">Trivandrum (TVC) <div class="route-arrow"></div> Chennai (MAS)</div>
+        <div class="route-meta"><span><i class="fas fa-clock"></i> 10:30 → 04:40+1</span><span><i class="fas fa-tag"></i> Kerala Express · 16343</span><span><i class="fas fa-bed"></i> Sleeper / 3AC / 2AC</span></div>
+      </div>
+      <div class="route-duration"><div class="dur-val">18h 10m</div><div class="dur-label">Duration</div></div>
+      <div class="route-seats"><div class="seats-val">48 berths</div><div class="seats-label">Available</div></div>
+      <div class="route-price-col"><div class="price-val">₹890</div><button class="price-btn">Book Now</button></div>
+    </div>
+
+    <div class="route-row" data-type="bus" onclick="openModal('KSRTC Superfast','Kollam → Thrissur','4h 30m','₹210')">
+      <div class="route-mode mode-bus"><i class="fas fa-bus"></i></div>
+      <div class="route-main">
+        <div class="route-cities">Kollam (KLM) <div class="route-arrow"></div> Thrissur (TCR)</div>
+        <div class="route-meta"><span><i class="fas fa-clock"></i> 07:00 → 11:30</span><span><i class="fas fa-tag"></i> KSRTC Superfast</span><span><i class="fas fa-snowflake"></i> AC Available</span></div>
+      </div>
+      <div class="route-duration"><div class="dur-val">4h 30m</div><div class="dur-label">Duration</div></div>
+      <div class="route-seats"><div class="seats-val">8 seats</div><div class="seats-label">Available</div></div>
+      <div class="route-price-col"><div class="price-val">₹210</div><button class="price-btn">Book Now</button></div>
+    </div>
+
+    <div class="route-row" data-type="flight" onclick="openModal('Air India AI-461','Calicut → Mumbai','2h 00m','₹4,780')">
+      <div class="route-mode mode-flight"><i class="fas fa-plane"></i></div>
+      <div class="route-main">
+        <div class="route-cities">Calicut (CCJ) <div class="route-arrow"></div> Mumbai (BOM)</div>
+        <div class="route-meta"><span><i class="fas fa-clock"></i> 14:00 → 16:00</span><span><i class="fas fa-tag"></i> Air India · AI-461</span><span><i class="fas fa-circle" style="font-size:7px;color:var(--teal)"></i> Non-stop</span></div>
+      </div>
+      <div class="route-duration"><div class="dur-val">2h 00m</div><div class="dur-label">Duration</div></div>
+      <div class="route-seats"><div class="seats-val">11 seats</div><div class="seats-label">Available</div></div>
+      <div class="route-price-col"><div class="price-val">₹4,780</div><button class="price-btn">Book Now</button></div>
+    </div>
+
+    <div class="route-row" data-type="train" onclick="openModal('Rajdhani Express 12431','Ernakulam → Delhi','40h 55m','₹2,350')">
+      <div class="route-mode mode-train"><i class="fas fa-train"></i></div>
+      <div class="route-main">
+        <div class="route-cities">Ernakulam (ERS) <div class="route-arrow"></div> New Delhi (NDLS)</div>
+        <div class="route-meta"><span><i class="fas fa-clock"></i> 19:00 → 11:55+2</span><span><i class="fas fa-tag"></i> Rajdhani Express · 12431</span><span><i class="fas fa-utensils"></i> Meals Included</span></div>
+      </div>
+      <div class="route-duration"><div class="dur-val">40h 55m</div><div class="dur-label">Duration</div></div>
+      <div class="route-seats"><div class="seats-val">6 berths</div><div class="seats-label">Available</div></div>
+      <div class="route-price-col"><div class="price-val">₹2,350</div><button class="price-btn">Book Now</button></div>
+    </div>
+
+    <div class="route-row" data-type="bus" onclick="openModal('VRL Travels AC Sleeper','Kochi → Bangalore','11h 00m','₹850')">
+      <div class="route-mode mode-bus"><i class="fas fa-bus"></i></div>
+      <div class="route-main">
+        <div class="route-cities">Kochi (EKM) <div class="route-arrow"></div> Bangalore (BLR)</div>
+        <div class="route-meta"><span><i class="fas fa-clock"></i> 22:00 → 09:00+1</span><span><i class="fas fa-tag"></i> VRL Travels · AC Sleeper</span><span><i class="fas fa-bed"></i> Sleeper</span></div>
+      </div>
+      <div class="route-duration"><div class="dur-val">11h 00m</div><div class="dur-label">Duration</div></div>
+      <div class="route-seats"><div class="seats-val">18 seats</div><div class="seats-label">Available</div></div>
+      <div class="route-price-col"><div class="price-val">₹850</div><button class="price-btn">Book Now</button></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="about">
+  <div class="section-tag">Simple Process</div>
+  <h2>Book in 4 Easy Steps</h2>
+  <p class="section-sub">From search to seat in under 2 minutes. Secure payment and instant confirmation.</p>
+  <div class="steps-grid">
+    <div class="step-item">
+      <div class="step-num">01</div>
+      <div class="step-title">Search Routes</div>
+      <div class="step-desc">Enter your origin, destination, date and preferred mode of travel.</div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">02</div>
+      <div class="step-title">Compare & Select</div>
+      <div class="step-desc">Browse real-time availability, compare prices and choose the best option.</div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">03</div>
+      <div class="step-title">Secure Payment</div>
+      <div class="step-desc">Pay via UPI, card, net banking or wallets. Your data is fully encrypted.</div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">04</div>
+      <div class="step-title">Get E-Ticket</div>
+      <div class="step-desc">Instant confirmation with digital ticket and real-time status tracking.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TRACKING -->
+<section id="tracking" class="tracking-section">
+  <div class="tracking-inner">
+    <div>
+      <div class="section-tag">Live Tracking</div>
+      <h2>Know Where Your Parcel Is, Always</h2>
+      <p class="section-sub" style="margin-bottom:36px">Real-time GPS tracking for all courier shipments. Enter your tracking ID below.</p>
+      <div class="tracking-info">
+        <div class="info-item"><div class="info-label">Shipments Tracked Today</div><div class="info-value teal">3,241</div></div>
+        <div class="info-item"><div class="info-label">Average Delivery Time</div><div class="info-value amber">1.8 days</div></div>
+        <div class="info-item"><div class="info-label">On-time Delivery Rate</div><div class="info-value">97.4%</div></div>
+      </div>
+    </div>
+    <div class="track-form">
+      <div class="track-input-wrap">
+        <input type="text" id="track-id" placeholder="e.g. CX0182" value="CX0182"/>
+        <button class="btn btn-primary" onclick="showTracking()"><i class="fas fa-search"></i> Track</button>
+      </div>
+      <div class="track-result" id="track-result">
+        <div class="track-id-badge"><i class="fas fa-box"></i> Courier #CX0182</div>
+        <div class="track-title">Ernakulam → Bengaluru · Fragile Package (1.2 kg)</div>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-dot done"><i class="fas fa-check"></i></div><div class="tl-body"><div class="tl-name">Picked up from sender</div><div class="tl-time">Jun 6, 9:14 AM — Ernakulam Hub</div></div></div>
+          <div class="tl-item"><div class="tl-dot done"><i class="fas fa-check"></i></div><div class="tl-body"><div class="tl-name">Dispatched from origin hub</div><div class="tl-time">Jun 6, 12:30 PM — EKM Sorting</div></div></div>
+          <div class="tl-item"><div class="tl-dot active"><i class="fas fa-truck"></i></div><div class="tl-body"><div class="tl-name">In transit — en route to Bengaluru</div><div class="tl-time">Jun 7 (Now) · Est. arrival 8:00 PM</div></div></div>
+          <div class="tl-item"><div class="tl-dot pending"><i class="fas fa-circle"></i></div><div class="tl-body"><div class="tl-name">Arrived at destination hub</div><div class="tl-time">Expected Jun 7, 8:00 PM</div></div></div>
+          <div class="tl-item"><div class="tl-dot pending"><i class="fas fa-circle"></i></div><div class="tl-body"><div class="tl-name">Out for delivery</div><div class="tl-time">Expected Jun 8</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="section-tag">User Reviews</div>
+  <h2>Trusted by Thousands</h2>
+  <p class="section-sub">Real feedback from real travelers and businesses across Kerala.</p>
+  <div class="testimonials-grid">
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <div class="testi-text">"Booked the train within 2 minutes. Got my e-ticket instantly and the PNR tracking worked flawlessly throughout the journey!"</div>
+      <div class="testi-author">
+        <div class="avatar" style="background:rgba(58,142,246,0.2);color:var(--blue)">RK</div>
+        <div><div class="author-name">Rahul Kumar</div><div class="author-sub">Frequent Traveler · Kochi</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <div class="testi-text">"The courier tracking is incredibly accurate. I could see my package move city to city in real time. Amazing service!"</div>
+      <div class="testi-author">
+        <div class="avatar" style="background:rgba(24,201,157,0.2);color:var(--teal)">AN</div>
+        <div><div class="author-name">Ananya Nair</div><div class="author-sub">Business Owner · Thrissur</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★☆</div>
+      <div class="testi-text">"Price comparison across airlines is a game changer. Saved ₹800 on my last Kochi–Mumbai trip just by comparing options."</div>
+      <div class="testi-author">
+        <div class="avatar" style="background:rgba(232,160,48,0.2);color:var(--accent)">SM</div>
+        <div><div class="author-name">Sujith Menon</div><div class="author-sub">Software Engineer · Calicut</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-tag" style="justify-content:center">Get Started</div>
+  <h2>Your Journey Starts Here</h2>
+  <p>Join over 50,000 users who book smarter, travel faster, and ship with confidence.</p>
+  <div class="cta-actions">
+    <a href="#search" class="btn btn-primary" style="font-size:15px;padding:14px 32px"><i class="fas fa-search"></i> Book a Ticket</a>
+    <a href="#tracking" class="btn btn-ghost" style="font-size:15px;padding:14px 32px"><i class="fas fa-box"></i> Send a Parcel</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo">Route<span>X</span></div>
+      <div class="footer-tagline">A unified platform for all your transport and courier booking needs across India.</div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">Flight Booking</a></li>
+        <li><a href="#services">Train Tickets</a></li>
+        <li><a href="#services">Bus Booking</a></li>
+        <li><a href="#services">Courier Services</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#about">Careers</a></li>
+        <li><a href="#about">Press</a></li>
+        <li><a href="#about">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#about">Help Center</a></li>
+        <li><a href="#about">Cancellation</a></li>
+        <li><a href="#about">Refunds</a></li>
+        <li><a href="#about">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 RouteX. All rights reserved.</span>
+    <div class="social-links">
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-linkedin"></i></a>
+      <a href="#"><i class="fab fa-facebook"></i></a>
+    </div>
+  </div>
+</footer>
+
+<!-- BOOKING MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button type="button" class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+    <h3 id="modal-title">Book Ticket</h3>
+    <div class="modal-sub" id="modal-sub">Fill in passenger details to confirm your booking.</div>
+    <div class="form-grid">
+      <div class="form-field"><label>First Name</label><input type="text" id="modal-first-name" placeholder="e.g. Arjun"/></div>
+      <div class="form-field"><label>Last Name</label><input type="text" id="modal-last-name" placeholder="e.g. Menon"/></div>
+      <div class="form-field"><label>Email</label><input type="email" id="modal-email" placeholder="email@example.com"/></div>
+      <div class="form-field"><label>Mobile</label><input type="tel" id="modal-mobile" placeholder="+91 XXXXX XXXXX"/></div>
+      <div class="form-field"><label>Class / Seat Type</label>
+        <select id="modal-class-select"><option>Economy</option><option>Business</option><option>Sleeper</option><option>3AC</option><option>2AC</option></select>
+      </div>
+      <div class="form-field"><label>Payment Mode</label>
+        <select><option>UPI</option><option>Credit / Debit Card</option><option>Net Banking</option><option>Wallet</option></select>
+      </div>
+    </div>
+    <div class="modal-total">
+      <div class="total-label">Total Payable (incl. taxes)</div>
+      <div class="total-val" id="modal-price">₹5,420</div>
+    </div>
+    <button type="button" class="btn btn-primary pay-btn" onclick="confirmBooking()"><i class="fas fa-lock"></i> Confirm & Pay</button>
+  </div>
+</div>
+
+<script>
+let currentSearchType = 'flight';
+
+function toggleNav(){
+  const navLinks = document.querySelector('.nav-links');
+  const icon = document.querySelector('.hamburger i');
+  if(navLinks){
+    navLinks.classList.toggle('open');
+    if(icon){
+      icon.className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+    }
+  }
+}
+
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    const navLinks = document.querySelector('.nav-links');
+    const icon = document.querySelector('.hamburger i');
+    if (navLinks && navLinks.classList.contains('open')) {
+      navLinks.classList.remove('open');
+      if (icon) icon.className = 'fas fa-bars';
+    }
+  });
+});
+
+function switchTab(el,type){
+  currentSearchType = type;
+  document.querySelectorAll('.s-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const lbl=document.getElementById('pax-label');
+  const select=document.getElementById('pax-field');
+  if(type==='courier'){
+    if(lbl) lbl.textContent='Weight (kg)';
+    if(select){
+      select.innerHTML='<option>Up to 1 kg</option><option>1 - 5 kg</option><option>5 - 10 kg</option><option>10+ kg</option>';
+    }
+  }else{
+    if(lbl) lbl.textContent='Passengers';
+    if(select){
+      select.innerHTML='<option>1 Passenger</option><option>2 Passengers</option><option>3 Passengers</option><option>4+ Passengers</option>';
+    }
+  }
+}
+
+function filterRoute(el,type){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  const rows = document.querySelectorAll('.route-row');
+  let count = 0;
+  rows.forEach(r=>{
+    const show = (type==='all'||r.dataset.type===type);
+    r.style.display = show ? 'grid' : 'none';
+    if(show) count++;
+  });
+  updateNoRoutesMsg(count);
+}
+
+function doSearch(){
+  const f=document.getElementById('from-field').value.trim().toLowerCase();
+  const t=document.getElementById('to-field').value.trim().toLowerCase();
+
+  const rows = document.querySelectorAll('.route-row');
+  let count = 0;
+
+  rows.forEach(r => {
+    const text = r.textContent.toLowerCase();
+    const type = r.dataset.type;
+    const matchesLocation = (!f || text.includes(f)) && (!t || text.includes(t));
+    const matchesType = (currentSearchType === 'courier') ? true : (type === currentSearchType || currentSearchType === 'all');
+
+    if(matchesLocation && matchesType){
+      r.style.display = 'grid';
+      count++;
+    } else {
+      r.style.display = 'none';
+    }
+  });
+
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  filterBtns.forEach(b => b.classList.remove('active'));
+  filterBtns.forEach(b => {
+    const btnText = b.textContent.trim().toLowerCase();
+    if ((currentSearchType === 'all' && btnText === 'all') ||
+        (currentSearchType === 'flight' && btnText.includes('flights')) ||
+        (currentSearchType === 'train' && btnText.includes('trains')) ||
+        (currentSearchType === 'bus' && btnText.includes('buses'))) {
+      b.classList.add('active');
+    }
+  });
+
+  updateNoRoutesMsg(count);
+  document.getElementById('routes').scrollIntoView({behavior:'smooth'});
+}
+
+function updateNoRoutesMsg(count){
+  let msg = document.getElementById('no-routes-msg');
+  if(count === 0){
+    if(!msg){
+      msg = document.createElement('div');
+      msg.id = 'no-routes-msg';
+      msg.style.cssText = 'text-align:center;padding:30px;color:var(--muted);font-size:14px;grid-column:1/-1;';
+      msg.textContent = 'No matching routes found.';
+      document.getElementById('routes-list').appendChild(msg);
+    } else {
+      msg.style.display = 'block';
+    }
+  } else if(msg){
+    msg.style.display = 'none';
+  }
+}
+
+function openModal(name,route,dur,price){
+  document.getElementById('modal-title').textContent='Book — '+name;
+  document.getElementById('modal-sub').textContent=route+' · '+dur;
+  document.getElementById('modal-price').textContent=price;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModalOutside(e){
+  if(e.target===document.getElementById('modal')) closeModal();
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+function confirmBooking(){
+  const firstName = document.getElementById('modal-first-name').value.trim();
+  const lastName = document.getElementById('modal-last-name').value.trim();
+  const email = document.getElementById('modal-email').value.trim();
+  const mobile = document.getElementById('modal-mobile').value.trim();
+
+  if(!firstName || !lastName || !email || !mobile){
+    alert('Please fill in all passenger contact details before confirming.');
+    return;
+  }
+
+  closeModal();
+  alert('✅ Booking Confirmed!\n\nYour e-ticket has been sent to your email. Check your inbox for the digital receipt and PNR/tracking details.');
+
+  document.getElementById('modal-first-name').value = '';
+  document.getElementById('modal-last-name').value = '';
+  document.getElementById('modal-email').value = '';
+  document.getElementById('modal-mobile').value = '';
+}
+
+function showTracking(){
+  const id=document.getElementById('track-id').value.trim();
+  if(!id){alert('Please enter a tracking ID.');return;}
+  const badge = document.querySelector('.track-id-badge');
+  if(badge){
+    badge.innerHTML = '<i class="fas fa-box"></i> Courier #' + id.toUpperCase();
+  }
+  document.getElementById('track-result').style.display='block';
+}
+
+document.querySelectorAll('a[href="#"]').forEach(a => {
+  a.addEventListener('click', (e) => e.preventDefault());
+});
+
+const dateField = document.getElementById('date-field');
+if(dateField){
+  const today = new Date().toISOString().split('T')[0];
+  dateField.min = today;
+  dateField.value = today;
+}
+</script>
+</body>
+</html>
