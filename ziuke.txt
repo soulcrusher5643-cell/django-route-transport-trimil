@@ -1,0 +1,7 @@
+zuike comments
+
+The “About Topic” page is unnecessary and can be removed, 
+and the Admin and User currently have the same dashboard,
+ so separate dashboards should be provided based on their roles.
+
+before pushing changes to git run "git pull" command.
