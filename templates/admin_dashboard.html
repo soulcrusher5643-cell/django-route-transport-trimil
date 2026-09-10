@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="bg-dark text-white py-4 mb-4 border-bottom border-secondary shadow-sm">
+    <div class="container d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h1 class="h3 fw-bold mb-1">🛡️ Administrator Control Panel</h1>
+            <p class="text-muted mb-0 small">System oversight, user management, and transport telemetry analytics.</p>
+        </div>
+        <div>
+            <span class="badge bg-danger fs-6 px-3 py-2">System Admin: {{ request.user.username }}</span>
+            <a href="/admin/" target="_blank" class="btn btn-outline-warning btn-sm ms-2">⚙️ Django Admin Site</a>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <!-- Stat Cards -->
+    <div class="row g-4 mb-5 text-center">
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm border-0 bg-white">
+                <div class="text-secondary small fw-bold text-uppercase">Total Registered Users</div>
+                <div class="display-5 fw-bold text-primary my-1">{{ total_users|default:1 }}</div>
+                <div class="text-muted small">Registered in database</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm border-0 bg-white">
+                <div class="text-secondary small fw-bold text-uppercase">Active Transport Routes</div>
+                <div class="display-5 fw-bold text-success my-1">120+</div>
+                <div class="text-muted small">Flights, Trains & Buses</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm border-0 bg-white">
+                <div class="text-secondary small fw-bold text-uppercase">Logistics Dispatches</div>
+                <div class="display-5 fw-bold text-warning my-1">3,240+</div>
+                <div class="text-muted small">Daily courier items tracked</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm border-0 bg-white">
+                <div class="text-secondary small fw-bold text-uppercase">System Status</div>
+                <div class="display-5 fw-bold text-info my-1">99.9%</div>
+                <div class="text-muted small">Operational uptime</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin User Management Table -->
+    <div class="card shadow-sm border-0 mb-5">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold text-dark">👥 User Account Management</h5>
+            <span class="badge bg-primary px-3 py-2">Total Accounts: {{ users_list|length }}</span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">#</th>
+                            <th>Username</th>
+                            <th>Full Name</th>
+                            <th>Age</th>
+                            <th>Role / Status</th>
+                            <th>Date Joined</th>
+                            <th class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users_list %}
+                        <tr>
+                            <td class="ps-4 fw-bold text-muted">{{ forloop.counter }}</td>
+                            <td>
+                                <strong class="text-dark">{{ user.username }}</strong>
+                                {% if user.id == request.user.id %}
+                                    <span class="badge bg-secondary ms-1">You</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ user.name|default:"N/A" }}</td>
+                            <td>{{ user.age|default:"--" }}</td>
+                            <td>
+                                {% if user.is_superuser or user.is_staff %}
+                                    <span class="badge bg-danger">Administrator</span>
+                                {% else %}
+                                    <span class="badge bg-primary">Standard User</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-muted small">{{ user.date_joined|date:"M d, Y" }}</td>
+                            <td class="text-end pe-4">
+                                <a href="/admin/myapp/register/{{ user.id }}/change/" target="_blank" class="btn btn-sm btn-outline-secondary">Edit in Admin</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center py-4 text-muted">No users found in database.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Telemetry & Operations -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold text-dark">🛠️ Transport Network Control</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <div>
+                                <strong>Flight Schedules Control</strong>
+                                <div class="text-muted small">Manage airlines, fares, and terminal allocations</div>
+                            </div>
+                            <span class="badge bg-success rounded-pill">Active</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <div>
+                                <strong>Rail Express Operations</strong>
+                                <div class="text-muted small">PNR tracking and sleeper berth inventory</div>
+                            </div>
+                            <span class="badge bg-success rounded-pill">Active</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <div>
+                                <strong>Inter-City Bus Network</strong>
+                                <div class="text-muted small">State & private bus route scheduling</div>
+                            </div>
+                            <span class="badge bg-success rounded-pill">Active</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold text-dark">📦 Courier & Dispatch Oversight</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <div>
+                                <strong>Real-Time GPS Dispatch Tracking</strong>
+                                <div class="text-muted small">Hub sorting and live consignment updates</div>
+                            </div>
+                            <span class="badge bg-primary">Online</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <div>
+                                <strong>Weight Class & Tariff Calculator</strong>
+                                <div class="text-muted small">Dynamic freight pricing and rate sheets</div>
+                            </div>
+                            <span class="badge bg-primary">Online</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <div>
+                                <strong>Customer Inquiries & Feedback</strong>
+                                <div class="text-muted small">Support tickets and resolution workflow</div>
+                            </div>
+                            <a href="{% url 'contact' %}" class="btn btn-sm btn-outline-primary">View Inquiries</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

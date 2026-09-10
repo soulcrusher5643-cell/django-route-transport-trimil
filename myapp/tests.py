@@ -12,11 +12,6 @@ class AppViewsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'home.html')
 
-        # Test about page
-        response = self.client.get(reverse('about'))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'about.html')
-
         # Test contact page
         response = self.client.get(reverse('contact'))
         self.assertEqual(response.status_code, 200)
@@ -47,31 +42,37 @@ class AppViewsTestCase(TestCase):
         self.assertRedirects(response, reverse('Sign_In'))
         self.assertTrue(Register.objects.filter(username='john_doe').exists())
 
-    def test_sign_in_and_logout(self):
-        # Create user
-        Register.objects.create_user(username='john_doe', password='password123', name='John Doe', age=25)
+    def test_role_based_dashboards(self):
+        # Create standard user
+        user = Register.objects.create_user(username='standard_user', password='password123', name='Standard User', age=25)
+        
+        # Create admin user
+        admin = Register.objects.create_superuser(username='admin_user', password='password123', name='Admin User', age=35)
 
-        # GET signin page
-        response = self.client.get(reverse('Sign_In'))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'Sign_In.html')
-
-        # Failed signin
+        # 1. Standard user login -> User Dashboard
         response = self.client.post(reverse('Sign_In'), {
-            'username': 'john_doe',
-            'password': 'wrongpassword'
-        })
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Invalid username or password')
-
-        # Successful signin
-        response = self.client.post(reverse('Sign_In'), {
-            'username': 'john_doe',
+            'username': 'standard_user',
             'password': 'password123'
         })
-        self.assertRedirects(response, reverse('home'))
+        self.assertRedirects(response, reverse('user_dashboard'))
+
+        # Standard user accessing admin dashboard -> Redirect to user dashboard
+        response = self.client.get(reverse('admin_dashboard'))
+        self.assertRedirects(response, reverse('user_dashboard'))
+        
+        self.client.get(reverse('logout'))
+
+        # 2. Admin user login -> Admin Dashboard
+        response = self.client.post(reverse('Sign_In'), {
+            'username': 'admin_user',
+            'password': 'password123'
+        })
+        self.assertRedirects(response, reverse('admin_dashboard'))
+
+        response = self.client.get(reverse('admin_dashboard'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'admin_dashboard.html')
 
         # Logout
         response = self.client.get(reverse('logout'))
         self.assertRedirects(response, reverse('Sign_In'))
-

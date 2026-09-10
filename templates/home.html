@@ -8,13 +8,27 @@
         <p class="lead text-muted mx-auto mb-4" style="max-width: 800px;">Your unified logistics and travel gateway. Plan routes, book transit tickets (Train, Flight, Bus), and dispatch secure courier services seamlessly via a single web interface.</p>
         
         <div class="d-flex justify-content-center align-items-center flex-wrap gap-2 mb-4">
-            <a href="{% url 'contact' %}" class="btn btn-primary-gradient btn-lg px-4">Book a Route Now</a>
-            <a href="{% url 'about' %}" class="btn btn-outline-custom btn-lg px-4">Explore System Modules</a>
+            {% if request.user.is_authenticated %}
+                {% if request.user.is_staff or request.user.is_superuser %}
+                    <a href="{% url 'admin_dashboard' %}" class="btn btn-danger btn-lg px-4">Go to Admin Dashboard</a>
+                {% else %}
+                    <a href="{% url 'user_dashboard' %}" class="btn btn-primary btn-lg px-4">Go to My Dashboard</a>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'contact' %}" class="btn btn-primary-gradient btn-lg px-4">Book a Route Now</a>
+                <a href="{% url 'Sign_In' %}" class="btn btn-outline-custom btn-lg px-4">Access Portal</a>
+            {% endif %}
         </div>
 
         {% if request.user.is_authenticated %}
             <div class="p-3 bg-light d-inline-block rounded-3 border">
-                <span class="text-secondary me-2">Signed in as: <strong class="text-primary">{{ request.user.username }}</strong></span>
+                <span class="text-secondary me-2">Signed in as: 
+                    {% if request.user.is_staff or request.user.is_superuser %}
+                        <strong class="text-danger">Admin ({{ request.user.username }})</strong>
+                    {% else %}
+                        <strong class="text-primary">{{ request.user.username }}</strong>
+                    {% endif %}
+                </span>
                 <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm ms-2">Log Out</a>
             </div>
         {% else %}
@@ -46,8 +60,8 @@
         <div class="col-md-4">
             <div class="card p-4 shadow-sm h-100 border-0 bg-white">
                 <div class="fs-1 text-warning mb-2">⚙️</div>
-                <h4 class="fw-bold">Unified Dashboard</h4>
-                <p class="text-muted small">Centralized control arrays managing real-time system parameters, route optimizations, and precise transaction analytics securely.</p>
+                <h4 class="fw-bold">Role-Based Dashboards</h4>
+                <p class="text-muted small">Dedicated control panels for system administrators and standard customers with tailored metric views and access security.</p>
             </div>
         </div>
     </div>

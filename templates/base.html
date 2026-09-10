@@ -21,16 +21,28 @@
                     <li class="nav-item">
                         <a class="nav-link {% if active_page == 'home' %}active active-custom{% endif %}" href="{% url 'home' %}">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if active_page == 'about' %}active active-custom{% endif %}" href="{% url 'about' %}">About Topic</a>
-                    </li>
+                    {% if request.user.is_authenticated %}
+                        {% if request.user.is_staff or request.user.is_superuser %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if active_page == 'admin_dashboard' %}active active-custom{% endif %}" href="{% url 'admin_dashboard' %}">🛡️ Admin Dashboard</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if active_page == 'user_dashboard' %}active active-custom{% endif %}" href="{% url 'user_dashboard' %}">👤 My Dashboard</a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link {% if active_page == 'contact' %}active active-custom{% endif %}" href="{% url 'contact' %}">Contact Us</a>
                     </li>
                 </ul>
                 <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
                     {% if request.user.is_authenticated %}
-                        <span class="badge bg-secondary px-3 py-2 me-1 font-monospace">👤 {{ request.user.username }}</span>
+                        {% if request.user.is_staff or request.user.is_superuser %}
+                            <span class="badge bg-danger px-3 py-2 me-1 font-monospace">🛡️ Admin: {{ request.user.username }}</span>
+                        {% else %}
+                            <span class="badge bg-primary px-3 py-2 me-1 font-monospace">👤 {{ request.user.username }}</span>
+                        {% endif %}
                         <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm px-3">Sign Out</a>
                     {% else %}
                         <a href="{% url 'Sign_In' %}" class="btn btn-outline-light btn-sm px-3">Sign In</a>
